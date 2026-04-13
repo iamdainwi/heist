@@ -34,7 +34,7 @@ pub fn run(args: GetArgs, vault_path: &Path) -> Result<()> {
         ));
     } else if args.meta {
         output::print_secret(&args.key, &secret);
-        // Also print value to stdout for piping.
+        // Value on stdout for piping.
         output::print_value(&secret.value);
     } else {
         output::print_value(&secret.value);
@@ -59,7 +59,7 @@ pub(crate) fn copy_to_clipboard(value: &str, timeout_secs: u64) -> Result<()> {
     ctx.set_text(value.to_string())
         .map_err(|e| HeistError::ClipboardError(e.to_string()))?;
 
-    // Spawn a background thread to clear the clipboard after `timeout_secs`.
+    // Background thread: clear clipboard after timeout.
     let value_owned = value.to_string();
     let done = Arc::new(AtomicBool::new(false));
     let done_clone = done.clone();
@@ -69,8 +69,7 @@ pub(crate) fn copy_to_clipboard(value: &str, timeout_secs: u64) -> Result<()> {
         if done_clone.load(Ordering::SeqCst) {
             return;
         }
-        // Only clear if the clipboard still holds our value (user may have
-        // copied something else in the meantime).
+        // Only clear if clipboard still holds our value.
         if let Ok(mut ctx2) = Clipboard::new() {
             if ctx2.get_text().ok().as_deref() == Some(&value_owned) {
                 let _ = ctx2.set_text(String::new());
@@ -78,12 +77,12 @@ pub(crate) fn copy_to_clipboard(value: &str, timeout_secs: u64) -> Result<()> {
         }
     });
 
-    // Register a Ctrl-C handler that marks the background thread done.
+    // Ctrl-C: signal the background thread to stop.
     ctrlc::set_handler(move || {
         done.store(true, Ordering::SeqCst);
         std::process::exit(0);
     })
-    .ok(); // Ignore if a handler is already set.
+    .ok();
 
     Ok(())
 }

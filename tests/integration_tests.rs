@@ -1,7 +1,4 @@
-//! Integration tests for heist.
-//!
-//! These tests exercise the store and vault layers end-to-end, verifying that
-//! secrets survive a full encrypt → persist → decrypt round-trip.
+//! Integration tests — end-to-end encrypt/persist/decrypt round-trips.
 
 use std::collections::HashSet;
 
@@ -119,9 +116,9 @@ fn force_overwrites_existing_vault() {
 
     Store::init(&path, "pw2", true).unwrap();
 
-    // Old password now fails.
+
     assert!(Store::open(&path, "pw1").is_err());
-    // New password works and vault is empty.
+
     let store2 = Store::open(&path, "pw2").unwrap();
     assert_eq!(store2.secret_count(), 0);
 }
@@ -156,7 +153,7 @@ fn audit_log_survives_roundtrip() {
     store.save().unwrap();
 
     let store2 = Store::open(&path, "pw").unwrap();
-    // Init is always recorded; we added 2 more entries.
+    // Init + 2 explicit records.
     assert!(store2.audit.entries.len() >= 2);
     let actions: Vec<_> = store2.audit.entries.iter().map(|e| &e.action).collect();
     assert!(actions.contains(&&AuditAction::Set));

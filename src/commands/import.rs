@@ -26,13 +26,13 @@ pub fn run(args: ImportArgs, vault_path: &Path) -> Result<()> {
     let mut skipped = 0usize;
 
     for (raw_key, value) in raw_pairs {
-        // Apply namespace prefix.
+        // Prepend namespace if provided.
         let key = match &args.namespace {
             Some(ns) => format!("{ns}/{raw_key}"),
             None => raw_key.clone(),
         };
 
-        // Validate the key (after namespace prepend).
+
         if validate_key(&key).is_err() {
             output::warn(&format!("Skipping invalid key '{key}'"));
             skipped += 1;
@@ -98,7 +98,7 @@ fn parse_input(content: &str, format: ImportFormat) -> Result<Vec<(String, Strin
     }
 }
 
-/// Parse a `.env` file: `KEY=VALUE` lines, ignoring comments and blanks.
+/// Parse `.env` format (`KEY=VALUE`, `#` comments, quoted values).
 fn parse_env(content: &str) -> Result<Vec<(String, String)>> {
     let mut pairs = Vec::new();
     for (lineno, raw_line) in content.lines().enumerate() {
@@ -110,14 +110,14 @@ fn parse_env(content: &str) -> Result<Vec<(String, String)>> {
             HeistError::ImportError(format!("line {}: missing '=' separator", lineno + 1))
         })?;
         let key = k.trim().to_string();
-        // Strip surrounding quotes from the value (single or double).
+
         let value = strip_quotes(v.trim()).to_string();
         pairs.push((key, value));
     }
     Ok(pairs)
 }
 
-/// Parse a JSON object `{"key": "value", ...}`.
+/// Parse a flat JSON object into key-value pairs.
 fn parse_json(content: &str) -> Result<Vec<(String, String)>> {
     let map: HashMap<String, serde_json::Value> = serde_json::from_str(content)
         .map_err(|e| HeistError::ImportError(format!("JSON parse error: {e}")))?;
@@ -136,7 +136,7 @@ fn parse_json(content: &str) -> Result<Vec<(String, String)>> {
     Ok(pairs)
 }
 
-/// Parse a YAML mapping `key: value`.
+/// Parse a flat YAML mapping into key-value pairs.
 fn parse_yaml(content: &str) -> Result<Vec<(String, String)>> {
     let map: HashMap<String, serde_yaml::Value> = serde_yaml::from_str(content)
         .map_err(|e| HeistError::ImportError(format!("YAML parse error: {e}")))?;

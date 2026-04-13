@@ -17,7 +17,7 @@ pub fn run(args: InitArgs, vault_path: &Path) -> Result<()> {
 }
 
 pub fn prompt_new_password() -> Result<String> {
-    // In non-interactive mode (env var supplied), skip the confirmation step.
+    // Non-interactive: env var or password file — skip confirmation.
     if let Ok(pw) = std::env::var("HEIST_MASTER_PASSWORD") {
         if !pw.is_empty() {
             if pw.len() < 8 {

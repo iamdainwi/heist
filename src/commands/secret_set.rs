@@ -53,23 +53,23 @@ pub fn run(args: SetArgs, vault_path: &Path) -> Result<()> {
     Ok(())
 }
 
-/// Resolve the secret value: prefer --value, then stdin pipe, then interactive prompt.
+/// Resolve the secret value from `--value`, piped stdin, or an interactive prompt.
 fn resolve_value(value_arg: Option<String>) -> Result<String> {
     if let Some(v) = value_arg {
         return Ok(v);
     }
 
-    // If stdin is not a terminal, read the piped value.
+    // Piped stdin.
     if !std::io::stdin().is_terminal() {
         let mut buf = String::new();
         std::io::stdin()
             .read_to_string(&mut buf)
             .map_err(HeistError::Io)?;
-        // Strip the trailing newline that `echo` or heredocs add.
+        // Strip trailing newline from pipes/heredocs.
         return Ok(buf.trim_end_matches('\n').to_string());
     }
 
-    // Interactive: use a hidden prompt so the value is not echoed.
+    // Interactive hidden prompt.
     rpassword::prompt_password("Enter secret value: ").map_err(HeistError::Io)
 }
 

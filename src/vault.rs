@@ -1,8 +1,7 @@
-//! Core data structures for the heist vault.
+//! Core vault data structures.
 //!
-//! `VaultFile` is what is written to disk (contains only encrypted blobs +
-//! unencrypted metadata like salt/nonce).  `VaultData` is the plaintext
-//! inner structure that lives only in memory after successful decryption.
+//! [`VaultFile`] is the on-disk envelope (encrypted blobs + cleartext metadata).
+//! [`VaultData`] is the in-memory plaintext representation after decryption.
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
@@ -122,7 +121,7 @@ impl AuditLog {
         Self::default()
     }
 
-    /// Append a new audit entry, capping history at 1 000 entries.
+    /// Append an entry, evicting the oldest beyond the 1 000-entry cap.
     pub fn record(&mut self, action: AuditAction, key: &str, note: Option<String>) {
         self.entries.push(AuditEntry {
             timestamp: Utc::now(),
@@ -130,7 +129,7 @@ impl AuditLog {
             key: key.to_string(),
             note,
         });
-        // Evict oldest entries beyond the cap.
+
         if self.entries.len() > 1_000 {
             let excess = self.entries.len() - 1_000;
             self.entries.drain(..excess);
@@ -181,14 +180,7 @@ impl std::fmt::Display for AuditAction {
 
 // ── Key validation ────────────────────────────────────────────────────────────
 
-/// Validate a secret key.
-///
-/// Rules:
-/// - 1–256 characters
-/// - Segments separated by `/`
-/// - Each segment: `[a-zA-Z0-9_.-]+`
-/// - No leading or trailing `/`
-/// - No consecutive `//`
+/// Validate a secret key against the allowed character and structure rules.
 pub fn validate_key(key: &str) -> crate::error::Result<()> {
     use crate::error::HeistError;
 
@@ -241,8 +233,7 @@ pub fn validate_key(key: &str) -> crate::error::Result<()> {
     Ok(())
 }
 
-/// Convert a secret key to an environment-variable name:
-/// uppercase, `/` and `-` become `_`.
+/// Convert a secret key to an environment-variable name.
 pub fn key_to_env(key: &str) -> String {
     key.to_uppercase()
         .replace('/', "_")

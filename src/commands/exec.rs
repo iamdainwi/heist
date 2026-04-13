@@ -8,7 +8,7 @@ use crate::{
 };
 
 pub fn run(args: ExecArgs, vault_path: &Path) -> Result<()> {
-    // Validate all keys before opening the vault.
+    // Validate keys eagerly before decryption.
     for key in &args.keys {
         validate_key(key)?;
     }
@@ -21,7 +21,7 @@ pub fn run(args: ExecArgs, vault_path: &Path) -> Result<()> {
     let password = prompt_password()?;
     let mut store = Store::open(vault_path, &password)?;
 
-    // Collect (env_name, value) pairs.
+    // Resolve secrets → env vars.
     let mut env_vars: Vec<(String, String)> = Vec::with_capacity(args.keys.len());
     for key in &args.keys {
         let secret = store
@@ -32,7 +32,7 @@ pub fn run(args: ExecArgs, vault_path: &Path) -> Result<()> {
         env_vars.push((key_to_env(key), secret.value.clone()));
     }
 
-    // Record audit entry before exec.
+    // Audit before exec.
     let keys_str = args.keys.join(", ");
     store.audit.record(
         AuditAction::Exec,
@@ -41,7 +41,7 @@ pub fn run(args: ExecArgs, vault_path: &Path) -> Result<()> {
     );
     store.save()?;
 
-    // Execute.
+
     let exit_status = Command::new(&cmd_parts[0])
         .args(&cmd_parts[1..])
         .envs(env_vars)
@@ -50,7 +50,7 @@ pub fn run(args: ExecArgs, vault_path: &Path) -> Result<()> {
             HeistError::ExecError(format!("failed to start '{}': {e}", cmd_parts[0]))
         })?;
 
-    // Propagate the child's exit code.
+    // Propagate child exit code.
     std::process::exit(exit_status.code().unwrap_or(1));
 }
 

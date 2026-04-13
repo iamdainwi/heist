@@ -1,18 +1,15 @@
-//! Password acquisition strategy, evaluated in order:
+//! Master password resolution.
 //!
-//! 1. `HEIST_PASSWORD_FILE` — path to a file whose first line is the password.
-//!    Preferred for CI; avoids the password appearing in the process env.
-//! 2. `HEIST_MASTER_PASSWORD` — password in the environment directly.
-//!    Convenient but less secure (visible via /proc/environ on Linux).
-//! 3. Interactive `rpassword` prompt on the controlling terminal.
+//! Sources checked in priority order: `HEIST_PASSWORD_FILE` env →
+//! `HEIST_MASTER_PASSWORD` env → interactive terminal prompt.
 
 use std::{env, fs};
 
 use crate::error::{HeistError, Result};
 
-/// Obtain the master password using the strategy described above.
+/// Resolve the master password from the environment or an interactive prompt.
 pub fn get_master_password(prompt: &str) -> Result<String> {
-    // 1. Password file
+    // Password file (CI-preferred).
     if let Ok(path) = env::var("HEIST_PASSWORD_FILE") {
         let content = fs::read_to_string(&path).map_err(|e| {
             HeistError::Io(std::io::Error::new(
@@ -30,13 +27,13 @@ pub fn get_master_password(prompt: &str) -> Result<String> {
         return Ok(pw);
     }
 
-    // 2. Env var
+    // Direct env var.
     if let Ok(pw) = env::var("HEIST_MASTER_PASSWORD") {
         if !pw.is_empty() {
             return Ok(pw);
         }
     }
 
-    // 3. Interactive terminal prompt
+    // Interactive TTY prompt (fallback).
     rpassword::prompt_password(prompt).map_err(HeistError::Io)
 }

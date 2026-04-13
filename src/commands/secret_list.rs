@@ -16,14 +16,14 @@ pub fn run(args: ListArgs, vault_path: &Path) -> Result<()> {
         .secrets
         .iter()
         .filter(|(key, secret)| {
-            // Namespace / prefix filter.
+            // Prefix filter.
             let prefix_ok = args
                 .prefix
                 .as_deref()
                 .map(|p| key.starts_with(p))
                 .unwrap_or(true);
 
-            // Tag filter — key must have ALL requested tags.
+            // Tag filter (AND semantics).
             let tags_ok = args.tags.iter().all(|t| secret.tags.contains(t));
 
             prefix_ok && tags_ok

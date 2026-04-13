@@ -1,19 +1,6 @@
-//! Clap CLI definition for heist.
+//! CLI argument definitions (clap).
 //!
-//! Commands:
-//!   init       — create a new vault
-//!   set        — store or update a secret
-//!   get        — retrieve a secret value
-//!   list (ls)  — list secrets with optional filters
-//!   remove(rm) — delete a secret
-//!   copy (cp)  — copy a secret to the clipboard
-//!   exec       — run a command with secrets injected as env vars
-//!   import     — import secrets from .env / JSON / YAML
-//!   export     — export secrets to .env / JSON / YAML
-//!   log        — display the audit log
-//!   rotate     — change the master password
-//!   info       — display vault metadata
-//!   completion — print shell completion script
+//! Top-level entry point is [`Cli`]; subcommands are enumerated in [`Command`].
 
 use std::path::PathBuf;
 

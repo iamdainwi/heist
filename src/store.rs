@@ -1,18 +1,9 @@
 //! Vault persistence layer.
 //!
-//! `Store` owns the decrypted vault data and audit log in memory and is
-//! responsible for reading/writing the encrypted vault file to disk.
-//!
-//! # Atomic writes
-//! Saves are performed via a write-to-temp-then-rename pattern so that a
-//! crash mid-write never leaves a partially-written vault file.
-//!
-//! # Key design decision — salt stability
-//! The Argon2id salt is generated once at `init` time and stored in the vault
-//! file in the clear.  Between saves the salt does NOT change; only the
-//! AES-GCM nonce is regenerated (which is correct — the nonce must be unique
-//! per (key, plaintext) pair but not secret).  The salt only changes when the
-//! master password is rotated.
+//! `Store` owns the decrypted secret data and audit log in memory and
+//! handles reading/writing the vault file with atomic (tmp + rename) saves.
+//! The Argon2id salt is stable across saves and regenerated only on password
+//! rotation.
 
 use std::fs;
 use std::path::{Path, PathBuf};
@@ -93,13 +84,13 @@ impl Store {
             )));
         }
 
-        // Decode salt.
+
         let salt = decode_hex_fixed::<SALT_LEN>(&vf.salt, "salt")?;
 
-        // Derive key — this is where the user password is validated.
+
         let key = crypto::derive_key(password, &salt)?;
 
-        // Decode and decrypt vault data.
+        // Decrypt secret data.
         let nonce = decode_hex_fixed::<NONCE_LEN>(&vf.nonce, "nonce")?;
         let ct = BASE64
             .decode(&vf.ciphertext)
@@ -109,7 +100,7 @@ impl Store {
             HeistError::CorruptedVault(format!("cannot deserialise vault data: {e}"))
         })?;
 
-        // Decode and decrypt audit log (best-effort — missing is OK).
+        // Decrypt audit log (best-effort; absent or corrupt → empty log).
         let audit = match (&vf.audit_nonce, &vf.audit_ciphertext) {
             (Some(an_hex), Some(act_b64)) => {
                 let an = decode_hex_fixed::<NONCE_LEN>(an_hex, "audit nonce")
@@ -142,12 +133,12 @@ impl Store {
             }
         }
 
-        // Encrypt vault data.
+
         let data_json = serde_json::to_vec(&self.data)
             .map_err(|e| HeistError::Serialization(e.to_string()))?;
         let (data_ct, data_nonce) = crypto::encrypt(&data_json, &self.key)?;
 
-        // Encrypt audit log.
+
         let audit_json = serde_json::to_vec(&self.audit)
             .map_err(|e| HeistError::Serialization(e.to_string()))?;
         let (audit_ct, audit_nonce) = crypto::encrypt(&audit_json, &self.key)?;
@@ -165,7 +156,7 @@ impl Store {
         let content = serde_json::to_string_pretty(&vf)
             .map_err(|e| HeistError::Serialization(e.to_string()))?;
 
-        // Atomic write: write to .tmp then rename.
+        // Atomic write: tmp → rename.
         let tmp = self.vault_path.with_extension("tmp");
         fs::write(&tmp, &content)?;
         fs::rename(&tmp, &self.vault_path)?;
@@ -221,7 +212,7 @@ mod tests {
 
         Store::init(&vault_path, "hunter2", false).unwrap();
 
-        // Re-open successfully with correct password.
+
         let store = Store::open(&vault_path, "hunter2").unwrap();
         assert_eq!(store.secret_count(), 0);
     }
@@ -288,10 +279,10 @@ mod tests {
             .insert("KEY".into(), crate::vault::Secret::new("val".into(), None, vec![]));
         store.rotate_password("new-pw").unwrap();
 
-        // Old password should fail.
+
         assert!(Store::open(&vault_path, "old-pw").is_err());
 
-        // New password should succeed and data preserved.
+
         let store2 = Store::open(&vault_path, "new-pw").unwrap();
         assert_eq!(store2.data.secrets["KEY"].value, "val");
     }

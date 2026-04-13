@@ -1,7 +1,7 @@
-//! Terminal output helpers — colours, tables, status messages.
+//! Terminal output formatting — status messages, tables, and vault info.
 //!
-//! All user-visible formatting lives here so that individual commands stay
-//! focused on logic rather than presentation.
+//! Centralises all user-facing presentation so command handlers remain
+//! logic-only.
 
 use chrono::{DateTime, Local, Utc};
 use colored::Colorize;

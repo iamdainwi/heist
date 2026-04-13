@@ -110,7 +110,7 @@ mod tests {
         let salt = generate_salt();
         let key = derive_key("password", &salt).unwrap();
         let (mut ct, nonce) = encrypt(b"hello", &key).unwrap();
-        ct[0] ^= 0xFF; // flip a byte
+        ct[0] ^= 0xFF;
 
         assert!(decrypt(&ct, &key, &nonce).is_err());
     }
