@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>heist — Secure Encrypted Secrets Manager for the Terminal</title>
+  <meta name="description" content="A secure, encrypted secrets manager for the terminal — written in Rust. AES-256-GCM encryption, Argon2id key derivation, encrypted audit log, and zero runtime dependencies." />
+  <meta name="keywords" content="secrets manager, password manager, CLI, terminal, encryption, AES-256, Argon2id, Rust, security" />
+  <meta name="author" content="Danwi Choudhary" />
+  <meta property="og:title" content="heist — Encrypted Secrets Manager" />
+  <meta property="og:description" content="Store secrets in a single encrypted file. AES-256-GCM, Argon2id, zero runtime dependencies." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0a0e17" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Background layers -->
+<div class="bg-grid"></div>
+<div class="bg-gradient-overlay"></div>
+
+<!-- ═══ Navigation ═══ -->
+<nav class="nav" id="nav">
+  <div class="container nav-inner">
+    <a href="#" class="nav-logo">
+      <span class="nav-logo-icon">🔐</span>
+      heist
+    </a>
+    <ul class="nav-links" id="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#commands">Commands</a></li>
+      <li><a href="#install">Install</a></li>
+      <li>
+        <a href="https://github.com/iamdainwi/heist" class="nav-cta" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          GitHub
+        </a>
+      </li>
+    </ul>
+    <button class="nav-mobile-toggle" id="nav-toggle" aria-label="Toggle menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- ═══ Hero ═══ -->
+<section class="hero" id="hero">
+  <div class="hero-orb hero-orb-1"></div>
+  <div class="hero-orb hero-orb-2"></div>
+  <div class="hero-orb hero-orb-3"></div>
+
+  <div class="container hero-content">
+    <div class="hero-text">
+      <div class="badge hero-badge">🛡️ Built with Rust</div>
+      <h1 class="hero-title">
+        Your secrets,<br />
+        <span class="gradient-text">encrypted at rest.</span>
+      </h1>
+      <p class="hero-description">
+        A secure secrets manager for the terminal. Every byte is ciphertext.
+        AES-256-GCM encryption, Argon2id key derivation, and zero runtime
+        dependencies — shipped as a single static binary.
+      </p>
+      <div class="hero-actions">
+        <a href="#install" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Install heist
+        </a>
+        <a href="https://github.com/iamdainwi/heist" class="btn-secondary" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          View Source
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-value gradient-text" data-count="256" data-suffix="-bit">0-bit</div>
+          <div class="hero-stat-label">AES Encryption</div>
+        </div>
+        <div>
+          <div class="hero-stat-value gradient-text" data-count="0" data-suffix="">0</div>
+          <div class="hero-stat-label">Runtime Deps</div>
+        </div>
+        <div>
+          <div class="hero-stat-value gradient-text" data-count="128" data-suffix="-bit">0-bit</div>
+          <div class="hero-stat-label">Quantum Security</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Hero Terminal -->
+    <div class="terminal" id="hero-terminal">
+      <div class="terminal-header">
+        <span class="terminal-dot red"></span>
+        <span class="terminal-dot yellow"></span>
+        <span class="terminal-dot green"></span>
+        <span class="terminal-title">~/.heist — zsh</span>
+      </div>
+      <div class="terminal-body"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Features ═══ -->
+<section class="features" id="features">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="badge">✨ Why heist</div>
+      <h2 class="section-title">Everything you need.<br /><span class="gradient-text">Nothing you don't.</span></h2>
+      <p class="section-subtitle">
+        A single binary, a single encrypted file, and a memorable password.
+        No background daemon. No cloud sync. No config files.
+      </p>
+    </div>
+
+    <div class="features-grid">
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon green">🔒</div>
+        <h3 class="feature-title">AES-256-GCM</h3>
+        <p class="feature-desc">Authenticated encryption verifies data integrity on every open. Tampered vaults are rejected immediately.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon cyan">🧬</div>
+        <h3 class="feature-title">Argon2id KDF</h3>
+        <p class="feature-desc">OWASP-recommended parameters — 64 MiB memory, 3 iterations, 4 threads — make brute-force impractical.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon purple">📜</div>
+        <h3 class="feature-title">Encrypted Audit Log</h3>
+        <p class="feature-desc">Every read, write, copy, and exec is recorded in an encrypted log stored inside the vault itself.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-1">
+        <div class="feature-icon yellow">📋</div>
+        <h3 class="feature-title">Clipboard Auto-Clear</h3>
+        <p class="feature-desc">Copied secrets are automatically cleared from the clipboard after a configurable timeout.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-2">
+        <div class="feature-icon red">⚡</div>
+        <h3 class="feature-title">Secret Injection</h3>
+        <p class="feature-desc">Run any subprocess with secrets injected as environment variables via <code>heist exec</code>.</p>
+      </div>
+      <div class="feature-card reveal reveal-delay-3">
+        <div class="feature-icon orange">📦</div>
+        <h3 class="feature-title">Import / Export</h3>
+        <p class="feature-desc">Move secrets between systems with .env, JSON, and YAML support in both directions.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Security ═══ -->
+<section class="security" id="security">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="badge">🛡️ Security Model</div>
+      <h2 class="section-title">Designed for <span class="gradient-text">paranoia.</span></h2>
+      <p class="section-subtitle">
+        Symmetric-only cryptography. No public keys to steal. Post-quantum safe by construction.
+      </p>
+    </div>
+
+    <div class="security-grid">
+      <div class="security-visual reveal">
+        <div class="encryption-flow">
+          <div class="flow-step">
+            <div class="flow-step-number">1</div>
+            <div class="flow-step-content">
+              <h4>Master Password</h4>
+              <p>Entered interactively or via environment for CI. Never written to disk.</p>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-step-number">2</div>
+            <div class="flow-step-content">
+              <h4>Argon2id Key Derivation</h4>
+              <p>Password + 256-bit salt → 256-bit AES key. Memory-hard and GPU-resistant.</p>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-step-number">3</div>
+            <div class="flow-step-content">
+              <h4>AES-256-GCM Encryption</h4>
+              <p>Fresh random 96-bit nonce on every save. Authenticated — tampered data is rejected.</p>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-step-number">4</div>
+            <div class="flow-step-content">
+              <h4>Atomic Persistence</h4>
+              <p>Write to temp → rename. A crash mid-save never corrupts the vault file.</p>
+            </div>
+          </div>
+          <div class="flow-connector"></div>
+          <div class="flow-step">
+            <div class="flow-step-number">5</div>
+            <div class="flow-step-content">
+              <h4>Memory Zeroization</h4>
+              <p>AES key and secret values are overwritten with zeros on drop.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="security-details reveal reveal-delay-2">
+        <div class="security-card">
+          <h3>⚙️ KDF Parameters</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 8px;">
+            OWASP minimum recommendations for Argon2id:
+          </p>
+          <div class="params">
+            <div class="param">
+              <div class="param-label">Memory</div>
+              <div class="param-value">64 MiB</div>
+            </div>
+            <div class="param">
+              <div class="param-label">Iterations</div>
+              <div class="param-value">3</div>
+            </div>
+            <div class="param">
+              <div class="param-label">Parallelism</div>
+              <div class="param-value">4 threads</div>
+            </div>
+            <div class="param">
+              <div class="param-label">Output</div>
+              <div class="param-value">256-bit key</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="security-card">
+          <h3>🔐 Vault File Structure</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;">
+            Only the format version, creation timestamp, and Argon2id salt are stored in 
+            the clear. Key names, values, descriptions, tags, and the entire audit log 
+            are encrypted within the AES-256-GCM ciphertext.
+          </p>
+        </div>
+
+        <div class="security-card">
+          <h3>🔄 Password Rotation</h3>
+          <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;">
+            <code>heist rotate</code> generates a new salt, derives a new key, and re-encrypts 
+            the entire vault — secrets and audit log — in a single atomic operation. The old 
+            password is immediately invalidated.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Commands ═══ -->
+<section class="commands" id="commands">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="badge">⌨️ Commands</div>
+      <h2 class="section-title">Simple by design.<br /><span class="gradient-text">Powerful by default.</span></h2>
+      <p class="section-subtitle">
+        Intuitive subcommands, shell completions, and scriptable output.
+      </p>
+    </div>
+
+    <div class="reveal">
+      <div class="commands-tabs">
+        <button class="cmd-tab active" data-tab="basics">Basics</button>
+        <button class="cmd-tab" data-tab="manage">Manage</button>
+        <button class="cmd-tab" data-tab="workflow">Workflow</button>
+        <button class="cmd-tab" data-tab="ci">CI/CD</button>
+      </div>
+
+      <div class="cmd-panels">
+        <!-- Basics -->
+        <div class="cmd-panel active" id="panel-basics">
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">Basics</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line" style="animation-delay:0s"><span class="terminal-comment"># Create a new vault</span></div>
+              <div class="terminal-line" style="animation-delay:.05s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist init</span></div>
+              <div class="terminal-line" style="animation-delay:.1s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.15s"><span class="terminal-comment"># Store a secret (interactive hidden prompt)</span></div>
+              <div class="terminal-line" style="animation-delay:.2s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist set github/token --tags "github,prod"</span></div>
+              <div class="terminal-line" style="animation-delay:.25s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.3s"><span class="terminal-comment"># Retrieve it</span></div>
+              <div class="terminal-line" style="animation-delay:.35s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist get github/token</span></div>
+              <div class="terminal-line" style="animation-delay:.4s"><span class="terminal-value">ghp_abc123...</span></div>
+              <div class="terminal-line" style="animation-delay:.45s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.5s"><span class="terminal-comment"># Copy to clipboard (auto-clears in 45s)</span></div>
+              <div class="terminal-line" style="animation-delay:.55s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist copy github/token</span></div>
+              <div class="terminal-line" style="animation-delay:.6s"><span class="terminal-success">✓ Copied to clipboard. Clears in 45 seconds.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Manage -->
+        <div class="cmd-panel" id="panel-manage">
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">Manage Secrets</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line" style="animation-delay:0s"><span class="terminal-comment"># List all secrets</span></div>
+              <div class="terminal-line" style="animation-delay:.05s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist list</span></div>
+              <div class="terminal-line" style="animation-delay:.1s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.15s"><span class="terminal-comment"># Filter by namespace</span></div>
+              <div class="terminal-line" style="animation-delay:.2s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist list aws/</span></div>
+              <div class="terminal-line" style="animation-delay:.25s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.3s"><span class="terminal-comment"># Filter by tag</span></div>
+              <div class="terminal-line" style="animation-delay:.35s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist list --tag prod --tag db</span></div>
+              <div class="terminal-line" style="animation-delay:.4s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.45s"><span class="terminal-comment"># Machine-readable output</span></div>
+              <div class="terminal-line" style="animation-delay:.5s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist list --json | jq '.[] | .value'</span></div>
+              <div class="terminal-line" style="animation-delay:.55s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.6s"><span class="terminal-comment"># Delete a secret</span></div>
+              <div class="terminal-line" style="animation-delay:.65s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist rm old/api-key --yes</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Workflow -->
+        <div class="cmd-panel" id="panel-workflow">
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">Workflow</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line" style="animation-delay:0s"><span class="terminal-comment"># Inject secrets into a subprocess</span></div>
+              <div class="terminal-line" style="animation-delay:.05s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist exec aws/access-key aws/secret-key -- terraform apply</span></div>
+              <div class="terminal-line" style="animation-delay:.1s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.15s"><span class="terminal-comment"># Import from .env file</span></div>
+              <div class="terminal-line" style="animation-delay:.2s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist import .env --namespace prod</span></div>
+              <div class="terminal-line" style="animation-delay:.25s"><span class="terminal-success">✓ Imported 12 secrets (0 skipped).</span></div>
+              <div class="terminal-line" style="animation-delay:.3s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.35s"><span class="terminal-comment"># Export as JSON</span></div>
+              <div class="terminal-line" style="animation-delay:.4s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist export aws/ --format json -o aws-secrets.json</span></div>
+              <div class="terminal-line" style="animation-delay:.45s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.5s"><span class="terminal-comment"># Rotate master password</span></div>
+              <div class="terminal-line" style="animation-delay:.55s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist rotate</span></div>
+              <div class="terminal-line" style="animation-delay:.6s"><span class="terminal-success">✓ Master password rotated. Vault re-encrypted with new key.</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CI/CD -->
+        <div class="cmd-panel" id="panel-ci">
+          <div class="terminal">
+            <div class="terminal-header">
+              <span class="terminal-dot red"></span>
+              <span class="terminal-dot yellow"></span>
+              <span class="terminal-dot green"></span>
+              <span class="terminal-title">CI / Automation</span>
+            </div>
+            <div class="terminal-body">
+              <div class="terminal-line" style="animation-delay:0s"><span class="terminal-comment"># Password via file (recommended for CI)</span></div>
+              <div class="terminal-line" style="animation-delay:.05s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">export HEIST_PASSWORD_FILE=/run/secrets/heist</span></div>
+              <div class="terminal-line" style="animation-delay:.1s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.15s"><span class="terminal-comment"># Or via environment variable</span></div>
+              <div class="terminal-line" style="animation-delay:.2s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">export HEIST_MASTER_PASSWORD="$CI_SECRET"</span></div>
+              <div class="terminal-line" style="animation-delay:.25s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.3s"><span class="terminal-comment"># Non-interactive — no TTY needed</span></div>
+              <div class="terminal-line" style="animation-delay:.35s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist exec DEPLOY_TOKEN -- ./deploy.sh</span></div>
+              <div class="terminal-line" style="animation-delay:.4s">&nbsp;</div>
+              <div class="terminal-line" style="animation-delay:.45s"><span class="terminal-comment"># Multiple vaults for different environments</span></div>
+              <div class="terminal-line" style="animation-delay:.5s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist --vault staging.heist list</span></div>
+              <div class="terminal-line" style="animation-delay:.55s"><span class="terminal-prompt">$ </span><span class="terminal-cmd">heist --vault production.heist list</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Install ═══ -->
+<section class="install" id="install">
+  <div class="container">
+    <div class="section-header reveal">
+      <div class="badge">📦 Installation</div>
+      <h2 class="section-title">Up and running in <span class="gradient-text">30 seconds.</span></h2>
+      <p class="section-subtitle">
+        Single static binary. No config. No daemon. No internet access required at runtime.
+      </p>
+    </div>
+
+    <div class="install-grid">
+      <div class="install-card reveal reveal-delay-1">
+        <div class="install-card-icon">📥</div>
+        <h3>Pre-built Binary</h3>
+        <p>Download for macOS, Linux, or Windows from the releases page.</p>
+        <div class="install-cmd">
+          <span class="cmd-text">curl -Lo heist https://github.com/iamdainwi/heist/releases/latest/download/heist</span>
+          <button class="copy-btn" aria-label="Copy">📋</button>
+        </div>
+      </div>
+
+      <div class="install-card reveal reveal-delay-2">
+        <div class="install-card-icon">📦</div>
+        <h3>Cargo Install</h3>
+        <p>Install from crates.io with the Rust toolchain.</p>
+        <div class="install-cmd">
+          <span class="cmd-text">cargo install heist</span>
+          <button class="copy-btn" aria-label="Copy">📋</button>
+        </div>
+      </div>
+
+      <div class="install-card reveal reveal-delay-3">
+        <div class="install-card-icon">🔧</div>
+        <h3>Build from Source</h3>
+        <p>Clone and build with Rust 1.74+.</p>
+        <div class="install-cmd">
+          <span class="cmd-text">git clone https://github.com/iamdainwi/heist && cd heist && cargo build --release</span>
+          <button class="copy-btn" aria-label="Copy">📋</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Quantum Resistance ═══ -->
+<section class="quantum" id="quantum">
+  <div class="container">
+    <div class="quantum-content">
+      <div class="reveal">
+        <div class="badge">⚛️ Post-Quantum</div>
+        <h2 class="section-title">Quantum resistant<br /><span class="gradient-text">by construction.</span></h2>
+        <p class="section-subtitle">
+          heist uses only symmetric cryptography. Shor's algorithm — the quantum threat 
+          to public-key crypto — has nothing to attack. Grover's algorithm reduces AES-256 
+          to an effective 128-bit security level, which NIST considers sufficient.
+        </p>
+      </div>
+
+      <div class="reveal reveal-delay-2">
+        <table class="quantum-table">
+          <thead>
+            <tr>
+              <th>Primitive</th>
+              <th>Quantum Threat</th>
+              <th>Post-Quantum</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>AES-256-GCM</td>
+              <td>Grover (quadratic)</td>
+              <td><span class="quantum-badge safe">~128-bit ✓</span></td>
+            </tr>
+            <tr>
+              <td>Argon2id (256-bit)</td>
+              <td>Grover (quadratic)</td>
+              <td><span class="quantum-badge safe">~128-bit ✓</span></td>
+            </tr>
+            <tr>
+              <td>Public-key crypto</td>
+              <td>Shor (exponential)</td>
+              <td><span class="quantum-badge na">Not used ✓</span></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="cta">
+  <div class="container">
+    <div class="cta-card reveal">
+      <h2 class="cta-title">Ready to <span class="gradient-text">secure your secrets?</span></h2>
+      <p class="cta-desc">
+        Open source, MIT licensed. Run <code>cargo install heist</code> and encrypt your first secret in under a minute.
+      </p>
+      <div class="cta-actions">
+        <a href="https://github.com/iamdainwi/heist" class="btn-primary" target="_blank" rel="noopener">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          Star on GitHub
+        </a>
+        <a href="#install" class="btn-secondary">
+          View Installation →
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ Footer ═══ -->
+<footer class="footer">
+  <div class="container footer-inner">
+    <div class="footer-left">
+      <span>🔐</span> heist · MIT License · Built with Rust
+    </div>
+    <ul class="footer-links">
+      <li><a href="https://github.com/iamdainwi/heist" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://github.com/iamdainwi/heist/releases" target="_blank" rel="noopener">Releases</a></li>
+      <li><a href="https://github.com/iamdainwi/heist/issues" target="_blank" rel="noopener">Issues</a></li>
+      <li><a href="https://github.com/iamdainwi/heist/blob/main/LICENSE" target="_blank" rel="noopener">License</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
