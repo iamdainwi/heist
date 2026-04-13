@@ -1,0 +1,53 @@
+[package]
+name = "heist"
+version = "0.1.0"
+edition = "2021"
+description = "A secure, encrypted secrets manager for the terminal"
+license = "MIT"
+keywords = ["secrets", "password-manager", "encryption", "cli", "security"]
+categories = ["command-line-utilities", "cryptography"]
+rust-version = "1.74"
+
+[lib]
+name = "heist"
+path = "src/lib.rs"
+
+[[bin]]
+name = "heist"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.4", features = ["derive", "env", "wrap_help", "color", "string"] }
+clap_complete = "4.4"
+aes-gcm = "0.10"
+argon2 = "0.5"
+rand = "0.8"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+serde_yaml = "0.9"
+rpassword = "7"
+colored = "2"
+comfy-table = "7"
+arboard = "3"
+anyhow = "1"
+thiserror = "1"
+dirs = "5"
+base64 = "0.21"
+chrono = { version = "0.4", features = ["serde"] }
+zeroize = { version = "1", features = ["derive"] }
+hex = "0.4"
+ctrlc = { version = "3", features = ["termination"] }
+once_cell = "1"
+regex = "1"
+
+[dev-dependencies]
+tempfile = "3"
+assert_cmd = "2"
+predicates = "3"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+strip = "symbols"
+panic = "abort"

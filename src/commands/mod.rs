@@ -1,0 +1,12 @@
+pub mod completion;
+pub mod exec;
+pub mod export;
+pub mod import;
+pub mod init;
+pub mod log;
+pub mod remove;
+pub mod rotate;
+pub mod secret_copy;
+pub mod secret_get;
+pub mod secret_list;
+pub mod secret_set;
