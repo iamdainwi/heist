@@ -95,6 +95,55 @@ a:hover {
   color: var(--accent-cyan);
 }
 
+/* ── Hugeicons Integration ─────────────────────────────────────────────── */
+
+.hgi-stroke {
+  display: inline-flex;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.badge .hgi-stroke {
+  font-size: 1em;
+}
+
+.feature-icon .hgi-stroke {
+  font-size: 1.4rem;
+}
+
+.security-card h3 .hgi-stroke {
+  font-size: 1.15rem;
+  color: var(--accent-green);
+}
+
+.install-card-icon .hgi-stroke {
+  font-size: 2rem;
+  color: var(--accent-green);
+}
+
+.nav-logo-icon .hgi-stroke {
+  font-size: 1.1rem;
+  color: var(--bg-primary);
+}
+
+.copy-btn .hgi-stroke {
+  font-size: 0.95rem;
+}
+
+.btn-primary .hgi-stroke,
+.btn-secondary .hgi-stroke {
+  font-size: 1.05rem;
+}
+
+.nav-cta .hgi-stroke {
+  font-size: 1rem;
+}
+
+.footer-left .hgi-stroke {
+  font-size: 1.1rem;
+  color: var(--accent-green);
+}
+
 /* ── Utility ───────────────────────────────────────────────────────────── */
 
 .container {
@@ -234,6 +283,7 @@ a:hover {
   border-radius: var(--radius-sm);
   background: var(--gradient-primary);
   font-size: 1.1rem;
+  overflow: hidden;
 }
 
 .nav-links {

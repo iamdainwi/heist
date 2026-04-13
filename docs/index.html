@@ -12,6 +12,7 @@
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#0a0e17" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🔐</text></svg>" />
+  <link rel="stylesheet" href="https://cdn.hugeicons.com/font/hgi-stroke-rounded.css" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -24,7 +25,7 @@
 <nav class="nav" id="nav">
   <div class="container nav-inner">
     <a href="#" class="nav-logo">
-      <span class="nav-logo-icon">🔐</span>
+      <span class="nav-logo-icon"><i class="hgi-stroke hgi-lock-password"></i></span>
       heist
     </a>
     <ul class="nav-links" id="nav-links">
@@ -34,7 +35,7 @@
       <li><a href="#install">Install</a></li>
       <li>
         <a href="https://github.com/iamdainwi/heist" class="nav-cta" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <i class="hgi-stroke hgi-github"></i>
           GitHub
         </a>
       </li>
@@ -53,7 +54,7 @@
 
   <div class="container hero-content">
     <div class="hero-text">
-      <div class="badge hero-badge">🛡️ Built with Rust</div>
+      <div class="badge hero-badge"><i class="hgi-stroke hgi-shield-01"></i> Built with Rust</div>
       <h1 class="hero-title">
         Your secrets,<br />
         <span class="gradient-text">encrypted at rest.</span>
@@ -65,11 +66,11 @@
       </p>
       <div class="hero-actions">
         <a href="#install" class="btn-primary">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <i class="hgi-stroke hgi-download-01"></i>
           Install heist
         </a>
         <a href="https://github.com/iamdainwi/heist" class="btn-secondary" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <i class="hgi-stroke hgi-github"></i>
           View Source
         </a>
       </div>
@@ -106,7 +107,7 @@
 <section class="features" id="features">
   <div class="container">
     <div class="section-header reveal">
-      <div class="badge">✨ Why heist</div>
+      <div class="badge"><i class="hgi-stroke hgi-sparkles"></i> Why heist</div>
       <h2 class="section-title">Everything you need.<br /><span class="gradient-text">Nothing you don't.</span></h2>
       <p class="section-subtitle">
         A single binary, a single encrypted file, and a memorable password.
@@ -116,32 +117,32 @@
 
     <div class="features-grid">
       <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon green">🔒</div>
+        <div class="feature-icon green"><i class="hgi-stroke hgi-lock"></i></div>
         <h3 class="feature-title">AES-256-GCM</h3>
         <p class="feature-desc">Authenticated encryption verifies data integrity on every open. Tampered vaults are rejected immediately.</p>
       </div>
       <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon cyan">🧬</div>
+        <div class="feature-icon cyan"><i class="hgi-stroke hgi-key-01"></i></div>
         <h3 class="feature-title">Argon2id KDF</h3>
         <p class="feature-desc">OWASP-recommended parameters — 64 MiB memory, 3 iterations, 4 threads — make brute-force impractical.</p>
       </div>
       <div class="feature-card reveal reveal-delay-3">
-        <div class="feature-icon purple">📜</div>
+        <div class="feature-icon purple"><i class="hgi-stroke hgi-audit-01"></i></div>
         <h3 class="feature-title">Encrypted Audit Log</h3>
         <p class="feature-desc">Every read, write, copy, and exec is recorded in an encrypted log stored inside the vault itself.</p>
       </div>
       <div class="feature-card reveal reveal-delay-1">
-        <div class="feature-icon yellow">📋</div>
+        <div class="feature-icon yellow"><i class="hgi-stroke hgi-clipboard"></i></div>
         <h3 class="feature-title">Clipboard Auto-Clear</h3>
         <p class="feature-desc">Copied secrets are automatically cleared from the clipboard after a configurable timeout.</p>
       </div>
       <div class="feature-card reveal reveal-delay-2">
-        <div class="feature-icon red">⚡</div>
+        <div class="feature-icon red"><i class="hgi-stroke hgi-flash"></i></div>
         <h3 class="feature-title">Secret Injection</h3>
         <p class="feature-desc">Run any subprocess with secrets injected as environment variables via <code>heist exec</code>.</p>
       </div>
       <div class="feature-card reveal reveal-delay-3">
-        <div class="feature-icon orange">📦</div>
+        <div class="feature-icon orange"><i class="hgi-stroke hgi-package"></i></div>
         <h3 class="feature-title">Import / Export</h3>
         <p class="feature-desc">Move secrets between systems with .env, JSON, and YAML support in both directions.</p>
       </div>
@@ -153,7 +154,7 @@
 <section class="security" id="security">
   <div class="container">
     <div class="section-header reveal">
-      <div class="badge">🛡️ Security Model</div>
+      <div class="badge"><i class="hgi-stroke hgi-shield-01"></i> Security Model</div>
       <h2 class="section-title">Designed for <span class="gradient-text">paranoia.</span></h2>
       <p class="section-subtitle">
         Symmetric-only cryptography. No public keys to steal. Post-quantum safe by construction.
@@ -207,7 +208,7 @@
 
       <div class="security-details reveal reveal-delay-2">
         <div class="security-card">
-          <h3>⚙️ KDF Parameters</h3>
+          <h3><i class="hgi-stroke hgi-settings-01"></i> KDF Parameters</h3>
           <p style="font-size: 0.88rem; color: var(--text-secondary); margin-bottom: 8px;">
             OWASP minimum recommendations for Argon2id:
           </p>
@@ -232,7 +233,7 @@
         </div>
 
         <div class="security-card">
-          <h3>🔐 Vault File Structure</h3>
+          <h3><i class="hgi-stroke hgi-lock-password"></i> Vault File Structure</h3>
           <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;">
             Only the format version, creation timestamp, and Argon2id salt are stored in 
             the clear. Key names, values, descriptions, tags, and the entire audit log 
@@ -241,7 +242,7 @@
         </div>
 
         <div class="security-card">
-          <h3>🔄 Password Rotation</h3>
+          <h3><i class="hgi-stroke hgi-rotate-01"></i> Password Rotation</h3>
           <p style="font-size: 0.88rem; color: var(--text-secondary); line-height: 1.7;">
             <code>heist rotate</code> generates a new salt, derives a new key, and re-encrypts 
             the entire vault — secrets and audit log — in a single atomic operation. The old 
@@ -257,7 +258,7 @@
 <section class="commands" id="commands">
   <div class="container">
     <div class="section-header reveal">
-      <div class="badge">⌨️ Commands</div>
+      <div class="badge"><i class="hgi-stroke hgi-terminal"></i> Commands</div>
       <h2 class="section-title">Simple by design.<br /><span class="gradient-text">Powerful by default.</span></h2>
       <p class="section-subtitle">
         Intuitive subcommands, shell completions, and scriptable output.
@@ -389,7 +390,7 @@
 <section class="install" id="install">
   <div class="container">
     <div class="section-header reveal">
-      <div class="badge">📦 Installation</div>
+      <div class="badge"><i class="hgi-stroke hgi-package"></i> Installation</div>
       <h2 class="section-title">Up and running in <span class="gradient-text">30 seconds.</span></h2>
       <p class="section-subtitle">
         Single static binary. No config. No daemon. No internet access required at runtime.
@@ -398,32 +399,32 @@
 
     <div class="install-grid">
       <div class="install-card reveal reveal-delay-1">
-        <div class="install-card-icon">📥</div>
+        <div class="install-card-icon"><i class="hgi-stroke hgi-download-01"></i></div>
         <h3>Pre-built Binary</h3>
         <p>Download for macOS, Linux, or Windows from the releases page.</p>
         <div class="install-cmd">
           <span class="cmd-text">curl -Lo heist https://github.com/iamdainwi/heist/releases/latest/download/heist</span>
-          <button class="copy-btn" aria-label="Copy">📋</button>
+          <button class="copy-btn" aria-label="Copy"><i class="hgi-stroke hgi-copy-01"></i></button>
         </div>
       </div>
 
       <div class="install-card reveal reveal-delay-2">
-        <div class="install-card-icon">📦</div>
+        <div class="install-card-icon"><i class="hgi-stroke hgi-package"></i></div>
         <h3>Cargo Install</h3>
         <p>Install from crates.io with the Rust toolchain.</p>
         <div class="install-cmd">
           <span class="cmd-text">cargo install heist</span>
-          <button class="copy-btn" aria-label="Copy">📋</button>
+          <button class="copy-btn" aria-label="Copy"><i class="hgi-stroke hgi-copy-01"></i></button>
         </div>
       </div>
 
       <div class="install-card reveal reveal-delay-3">
-        <div class="install-card-icon">🔧</div>
+        <div class="install-card-icon"><i class="hgi-stroke hgi-code"></i></div>
         <h3>Build from Source</h3>
         <p>Clone and build with Rust 1.74+.</p>
         <div class="install-cmd">
           <span class="cmd-text">git clone https://github.com/iamdainwi/heist && cd heist && cargo build --release</span>
-          <button class="copy-btn" aria-label="Copy">📋</button>
+          <button class="copy-btn" aria-label="Copy"><i class="hgi-stroke hgi-copy-01"></i></button>
         </div>
       </div>
     </div>
@@ -435,7 +436,7 @@
   <div class="container">
     <div class="quantum-content">
       <div class="reveal">
-        <div class="badge">⚛️ Post-Quantum</div>
+        <div class="badge"><i class="hgi-stroke hgi-atom-01"></i> Post-Quantum</div>
         <h2 class="section-title">Quantum resistant<br /><span class="gradient-text">by construction.</span></h2>
         <p class="section-subtitle">
           heist uses only symmetric cryptography. Shor's algorithm — the quantum threat 
@@ -486,7 +487,7 @@
       </p>
       <div class="cta-actions">
         <a href="https://github.com/iamdainwi/heist" class="btn-primary" target="_blank" rel="noopener">
-          <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+          <i class="hgi-stroke hgi-star"></i>
           Star on GitHub
         </a>
         <a href="#install" class="btn-secondary">
@@ -501,7 +502,7 @@
 <footer class="footer">
   <div class="container footer-inner">
     <div class="footer-left">
-      <span>🔐</span> heist · MIT License · Built with Rust
+      <i class="hgi-stroke hgi-lock-password"></i> heist · MIT License · Built with Rust
     </div>
     <ul class="footer-links">
       <li><a href="https://github.com/iamdainwi/heist" target="_blank" rel="noopener">GitHub</a></li>
