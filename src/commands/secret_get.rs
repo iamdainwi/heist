@@ -21,9 +21,7 @@ pub fn run(args: GetArgs, vault_path: &Path) -> Result<()> {
         })?
         .clone();
 
-    store
-        .audit
-        .record(AuditAction::Get, &args.key, None);
+    store.audit.record(AuditAction::Get, &args.key, None);
     store.save()?;
 
     if args.clip {
@@ -54,8 +52,7 @@ pub(crate) fn copy_to_clipboard(value: &str, timeout_secs: u64) -> Result<()> {
         time::Duration,
     };
 
-    let mut ctx = Clipboard::new()
-        .map_err(|e| HeistError::ClipboardError(e.to_string()))?;
+    let mut ctx = Clipboard::new().map_err(|e| HeistError::ClipboardError(e.to_string()))?;
     ctx.set_text(value.to_string())
         .map_err(|e| HeistError::ClipboardError(e.to_string()))?;
 

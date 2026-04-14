@@ -16,7 +16,6 @@ pub fn run(args: ExportArgs, vault_path: &Path) -> Result<()> {
     let password = prompt_password()?;
     let mut store = Store::open(vault_path, &password)?;
 
-
     let mut secrets: Vec<(&String, &Secret)> = store
         .data
         .secrets
@@ -40,18 +39,12 @@ pub fn run(args: ExportArgs, vault_path: &Path) -> Result<()> {
 
     let rendered = render(&secrets, args.format)?;
 
-
     store.audit.record(
         AuditAction::Export,
         "*",
-        Some(format!(
-            "format={:?}, count={}",
-            args.format,
-            secrets.len()
-        )),
+        Some(format!("format={:?}, count={}", args.format, secrets.len())),
     );
     store.save()?;
-
 
     match &args.output {
         Some(path) => {
@@ -91,7 +84,6 @@ fn render(secrets: &[(&String, &Secret)], format: ExportFormat) -> Result<String
 fn render_env(secrets: &[(&String, &Secret)]) -> Result<String> {
     let mut out = String::new();
     for (key, secret) in secrets {
-
         let escaped = secret.value.replace('"', "\\\"");
         out.push_str(&format!("{key}=\"{escaped}\"\n"));
     }

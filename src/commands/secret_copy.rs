@@ -21,9 +21,7 @@ pub fn run(args: CopyArgs, vault_path: &Path) -> Result<()> {
         })?
         .clone();
 
-    store
-        .audit
-        .record(AuditAction::Copy, &args.key, None);
+    store.audit.record(AuditAction::Copy, &args.key, None);
     store.save()?;
 
     super::secret_get::copy_to_clipboard(&secret.value, args.timeout)?;

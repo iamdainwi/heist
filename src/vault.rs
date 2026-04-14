@@ -236,9 +236,7 @@ pub fn validate_key(key: &str) -> crate::error::Result<()> {
 /// Convert a secret key to an environment-variable name.
 pub fn key_to_env(key: &str) -> String {
     key.to_uppercase()
-        .replace('/', "_")
-        .replace('-', "_")
-        .replace('.', "_")
+        .replace(['/', '-', '.'], "_")
         .replace('@', "_AT_")
 }
 

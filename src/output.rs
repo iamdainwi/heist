@@ -37,22 +37,18 @@ pub fn print_value(value: &str) {
 /// Print a secret with its metadata to stderr and value to stdout.
 pub fn print_secret(key: &str, secret: &Secret) {
     eprintln!("{}", key.cyan().bold());
-    eprintln!(
-        "  {} {}",
-        "value:".dimmed(),
-        secret.value.green()
-    );
+    eprintln!("  {} {}", "value:".dimmed(), secret.value.green());
     if let Some(desc) = &secret.description {
         eprintln!("  {} {}", "desc: ".dimmed(), desc);
     }
     if !secret.tags.is_empty() {
-        eprintln!("  {} {}", "tags: ".dimmed(), secret.tags.join(", ").yellow());
+        eprintln!(
+            "  {} {}",
+            "tags: ".dimmed(),
+            secret.tags.join(", ").yellow()
+        );
     }
-    eprintln!(
-        "  {} {}",
-        "updated:".dimmed(),
-        fmt_local(secret.updated_at)
-    );
+    eprintln!("  {} {}", "updated:".dimmed(), fmt_local(secret.updated_at));
 }
 
 // ── Secret list table ─────────────────────────────────────────────────────────
@@ -114,11 +110,7 @@ pub fn print_audit_table(log: &AuditLog, limit: usize, key_filter: Option<&str>)
         .entries
         .iter()
         .rev()
-        .filter(|e| {
-            key_filter
-                .map(|f| e.key.starts_with(f))
-                .unwrap_or(true)
-        })
+        .filter(|e| key_filter.map(|f| e.key.starts_with(f)).unwrap_or(true))
         .take(limit)
         .collect();
 
@@ -169,11 +161,19 @@ pub fn print_audit_table(log: &AuditLog, limit: usize, key_filter: Option<&str>)
 
 pub fn print_vault_info(path: &std::path::Path, secret_count: usize, created_at: DateTime<Utc>) {
     eprintln!("{}", "Vault information".bold().underline());
-    eprintln!("  {} {}", "path:    ".dimmed(), path.display().to_string().green());
-    eprintln!("  {} {}", "secrets: ".dimmed(), secret_count.to_string().yellow().bold());
+    eprintln!(
+        "  {} {}",
+        "path:    ".dimmed(),
+        path.display().to_string().green()
+    );
+    eprintln!(
+        "  {} {}",
+        "secrets: ".dimmed(),
+        secret_count.to_string().yellow().bold()
+    );
     eprintln!("  {} {}", "created: ".dimmed(), fmt_local(created_at));
-    eprintln!("  {} {}", "cipher:  ".dimmed(), "AES-256-GCM");
-    eprintln!("  {} {}", "kdf:     ".dimmed(), "Argon2id (m=65536, t=3, p=4)");
+    eprintln!("  {} AES-256-GCM", "cipher:  ".dimmed());
+    eprintln!("  {} Argon2id (m=65536, t=3, p=4)", "kdf:     ".dimmed());
 }
 
 // ── Helpers ───────────────────────────────────────────────────────────────────

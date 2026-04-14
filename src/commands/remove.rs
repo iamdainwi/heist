@@ -39,9 +39,7 @@ fn confirm_delete(key: &str) -> Result<bool> {
     io::stderr().flush().map_err(HeistError::Io)?;
 
     let mut input = String::new();
-    io::stdin()
-        .read_line(&mut input)
-        .map_err(HeistError::Io)?;
+    io::stdin().read_line(&mut input).map_err(HeistError::Io)?;
 
     Ok(matches!(input.trim().to_lowercase().as_str(), "y" | "yes"))
 }

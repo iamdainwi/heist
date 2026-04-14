@@ -73,9 +73,8 @@ impl Store {
         }
 
         let content = fs::read_to_string(vault_path)?;
-        let vf: VaultFile = serde_json::from_str(&content).map_err(|e| {
-            HeistError::CorruptedVault(format!("cannot parse vault file: {e}"))
-        })?;
+        let vf: VaultFile = serde_json::from_str(&content)
+            .map_err(|e| HeistError::CorruptedVault(format!("cannot parse vault file: {e}")))?;
 
         if vf.version != 1 {
             return Err(HeistError::CorruptedVault(format!(
@@ -84,9 +83,7 @@ impl Store {
             )));
         }
 
-
         let salt = decode_hex_fixed::<SALT_LEN>(&vf.salt, "salt")?;
-
 
         let key = crypto::derive_key(password, &salt)?;
 
@@ -133,11 +130,9 @@ impl Store {
             }
         }
 
-
-        let data_json = serde_json::to_vec(&self.data)
-            .map_err(|e| HeistError::Serialization(e.to_string()))?;
+        let data_json =
+            serde_json::to_vec(&self.data).map_err(|e| HeistError::Serialization(e.to_string()))?;
         let (data_ct, data_nonce) = crypto::encrypt(&data_json, &self.key)?;
-
 
         let audit_json = serde_json::to_vec(&self.audit)
             .map_err(|e| HeistError::Serialization(e.to_string()))?;
@@ -212,7 +207,6 @@ mod tests {
 
         Store::init(&vault_path, "hunter2", false).unwrap();
 
-
         let store = Store::open(&vault_path, "hunter2").unwrap();
         assert_eq!(store.secret_count(), 0);
     }
@@ -257,10 +251,10 @@ mod tests {
         let vault_path = dir.path().join("vault.heist");
 
         let mut store = Store::init(&vault_path, "pw", false).unwrap();
-        store
-            .data
-            .secrets
-            .insert("TOKEN".into(), crate::vault::Secret::new("abc123".into(), None, vec![]));
+        store.data.secrets.insert(
+            "TOKEN".into(),
+            crate::vault::Secret::new("abc123".into(), None, vec![]),
+        );
         store.save().unwrap();
 
         let store2 = Store::open(&vault_path, "pw").unwrap();
@@ -273,15 +267,13 @@ mod tests {
         let vault_path = dir.path().join("vault.heist");
 
         let mut store = Store::init(&vault_path, "old-pw", false).unwrap();
-        store
-            .data
-            .secrets
-            .insert("KEY".into(), crate::vault::Secret::new("val".into(), None, vec![]));
+        store.data.secrets.insert(
+            "KEY".into(),
+            crate::vault::Secret::new("val".into(), None, vec![]),
+        );
         store.rotate_password("new-pw").unwrap();
 
-
         assert!(Store::open(&vault_path, "old-pw").is_err());
-
 
         let store2 = Store::open(&vault_path, "new-pw").unwrap();
         assert_eq!(store2.data.secrets["KEY"].value, "val");

@@ -38,10 +38,8 @@ pub fn generate_salt() -> [u8; SALT_LEN] {
 /// The returned key is wrapped in `Zeroizing` so it is erased from memory
 /// when dropped.
 pub fn derive_key(password: &str, salt: &[u8; SALT_LEN]) -> Result<Zeroizing<[u8; KEY_LEN]>> {
-    let params =
-        Params::new(ARGON2_M_COST, ARGON2_T_COST, ARGON2_P_COST, Some(KEY_LEN)).map_err(|e| {
-            HeistError::EncryptionError(format!("Argon2 parameter error: {e}"))
-        })?;
+    let params = Params::new(ARGON2_M_COST, ARGON2_T_COST, ARGON2_P_COST, Some(KEY_LEN))
+        .map_err(|e| HeistError::EncryptionError(format!("Argon2 parameter error: {e}")))?;
 
     let argon2 = Argon2::new(Algorithm::Argon2id, Version::V0x13, params);
 

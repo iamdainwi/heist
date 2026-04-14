@@ -37,7 +37,11 @@ fn secrets_survive_roundtrip() {
     let mut store = Store::init(&path, "pw", false).unwrap();
     store.data.secrets.insert(
         "github/token".into(),
-        Secret::new("ghp_abc123".into(), Some("GitHub PAT".into()), vec!["github".into()]),
+        Secret::new(
+            "ghp_abc123".into(),
+            Some("GitHub PAT".into()),
+            vec!["github".into()],
+        ),
     );
     store.data.secrets.insert(
         "DATABASE_URL".into(),
@@ -116,7 +120,6 @@ fn force_overwrites_existing_vault() {
 
     Store::init(&path, "pw2", true).unwrap();
 
-
     assert!(Store::open(&path, "pw1").is_err());
 
     let store2 = Store::open(&path, "pw2").unwrap();
@@ -149,7 +152,9 @@ fn audit_log_survives_roundtrip() {
 
     let mut store = Store::init(&path, "pw", false).unwrap();
     store.audit.record(AuditAction::Set, "my/key", None);
-    store.audit.record(AuditAction::Get, "my/key", Some("test note".into()));
+    store
+        .audit
+        .record(AuditAction::Get, "my/key", Some("test note".into()));
     store.save().unwrap();
 
     let store2 = Store::open(&path, "pw").unwrap();

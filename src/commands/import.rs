@@ -32,7 +32,6 @@ pub fn run(args: ImportArgs, vault_path: &Path) -> Result<()> {
             None => raw_key.clone(),
         };
 
-
         if validate_key(&key).is_err() {
             output::warn(&format!("Skipping invalid key '{key}'"));
             skipped += 1;
@@ -73,11 +72,7 @@ fn detect_format(args: &ImportArgs) -> Result<ImportFormat> {
     if let Some(fmt) = args.format {
         return Ok(fmt);
     }
-    let ext = args
-        .file
-        .extension()
-        .and_then(|e| e.to_str())
-        .unwrap_or("");
+    let ext = args.file.extension().and_then(|e| e.to_str()).unwrap_or("");
     match ext.to_lowercase().as_str() {
         "json" => Ok(ImportFormat::Json),
         "yaml" | "yml" => Ok(ImportFormat::Yaml),
@@ -124,12 +119,12 @@ fn parse_json(content: &str) -> Result<Vec<(String, String)>> {
 
     let pairs = map
         .into_iter()
-        .filter_map(|(k, v)| {
+        .map(|(k, v)| {
             let val = match v {
                 serde_json::Value::String(s) => s,
                 other => other.to_string(),
             };
-            Some((k, val))
+            (k, val)
         })
         .collect();
 
@@ -158,9 +153,7 @@ fn parse_yaml(content: &str) -> Result<Vec<(String, String)>> {
 }
 
 fn strip_quotes(s: &str) -> &str {
-    if (s.starts_with('"') && s.ends_with('"'))
-        || (s.starts_with('\'') && s.ends_with('\''))
-    {
+    if (s.starts_with('"') && s.ends_with('"')) || (s.starts_with('\'') && s.ends_with('\'')) {
         &s[1..s.len() - 1]
     } else {
         s

@@ -74,8 +74,8 @@ fn run_info(vault_path: &std::path::Path) -> error::Result<()> {
     let s = store::Store::open(vault_path, &password)?;
 
     let content = std::fs::read_to_string(vault_path)?;
-    let vf: vault::VaultFile = serde_json::from_str(&content)
-        .map_err(|e| HeistError::CorruptedVault(e.to_string()))?;
+    let vf: vault::VaultFile =
+        serde_json::from_str(&content).map_err(|e| HeistError::CorruptedVault(e.to_string()))?;
 
     output::print_vault_info(vault_path, s.secret_count(), vf.created_at);
     Ok(())

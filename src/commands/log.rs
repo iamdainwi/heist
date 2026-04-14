@@ -1,11 +1,6 @@
 use std::path::Path;
 
-use crate::{
-    cli::LogArgs,
-    error::Result,
-    output,
-    store::Store,
-};
+use crate::{cli::LogArgs, error::Result, output, store::Store};
 
 pub fn run(args: LogArgs, vault_path: &Path) -> Result<()> {
     let password = prompt_password()?;

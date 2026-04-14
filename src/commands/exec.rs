@@ -41,14 +41,11 @@ pub fn run(args: ExecArgs, vault_path: &Path) -> Result<()> {
     );
     store.save()?;
 
-
     let exit_status = Command::new(&cmd_parts[0])
         .args(&cmd_parts[1..])
         .envs(env_vars)
         .status()
-        .map_err(|e| {
-            HeistError::ExecError(format!("failed to start '{}': {e}", cmd_parts[0]))
-        })?;
+        .map_err(|e| HeistError::ExecError(format!("failed to start '{}': {e}", cmd_parts[0])))?;
 
     // Propagate child exit code.
     std::process::exit(exit_status.code().unwrap_or(1));

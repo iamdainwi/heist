@@ -1,10 +1,6 @@
 use std::path::Path;
 
-use crate::{
-    error::Result,
-    output, prompt,
-    store::Store,
-};
+use crate::{error::Result, output, prompt, store::Store};
 
 pub fn run(vault_path: &Path) -> Result<()> {
     output::info("Rotating master password...");

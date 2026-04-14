@@ -36,13 +36,12 @@ pub fn prompt_new_password() -> Result<String> {
         return Ok(pw);
     }
 
-    let pw = rpassword::prompt_password("Enter master password: ")
-        .map_err(HeistError::Io)?;
+    let pw = rpassword::prompt_password("Enter master password: ").map_err(HeistError::Io)?;
     if pw.len() < 8 {
         return Err(HeistError::PasswordTooShort);
     }
-    let confirm = rpassword::prompt_password("Confirm master password: ")
-        .map_err(HeistError::Io)?;
+    let confirm =
+        rpassword::prompt_password("Confirm master password: ").map_err(HeistError::Io)?;
     if pw != confirm {
         return Err(HeistError::PasswordMismatch);
     }
