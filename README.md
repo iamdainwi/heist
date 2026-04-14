@@ -135,20 +135,49 @@ The 256-bit AES key is held in a `Zeroizing<[u8; 32]>` wrapper from the [`zeroiz
 
 ## Installation
 
-### Pre-built binary (recommended)
+No Rust required. Pick the one-liner for your platform.
 
-Download the latest release for your platform from the [releases page](https://github.com/iamdainwi/heist/releases).
+### macOS and Linux
 
-```bash
-# macOS / Linux
-curl -Lo heist https://github.com/iamdainwi/heist/releases/latest/download/heist-$(uname -s | tr '[:upper:]' '[:lower:]')-$(uname -m)
-chmod +x heist
-sudo mv heist /usr/local/bin/
+```sh
+curl -fsSL https://raw.githubusercontent.com/iamdainwi/heist/master/install.sh | sh
 ```
 
-### Cargo
+The script auto-detects your OS and CPU architecture, downloads the right
+pre-built binary, verifies its SHA-256 checksum, and installs to
+`/usr/local/bin` (or `~/.local/bin` if you don't have write access there).
 
-```bash
+**Install a specific version:**
+
+```sh
+HEIST_VERSION=v0.2.0 curl -fsSL https://raw.githubusercontent.com/iamdainwi/heist/master/install.sh | sh
+```
+
+**Install to a custom directory:**
+
+```sh
+HEIST_INSTALL_DIR=~/.local/bin curl -fsSL https://raw.githubusercontent.com/iamdainwi/heist/master/install.sh | sh
+```
+
+### Windows (PowerShell)
+
+```powershell
+irm https://raw.githubusercontent.com/iamdainwi/heist/master/install.ps1 | iex
+```
+
+Downloads the Windows binary, verifies its checksum, installs to
+`%LOCALAPPDATA%\heist\bin`, and adds that directory to your user `PATH`
+permanently.
+
+### Homebrew (macOS)
+
+```sh
+brew install iamdainwi/tap/heist
+```
+
+### Cargo (requires Rust)
+
+```sh
 cargo install heist
 ```
 
